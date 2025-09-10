@@ -134,10 +134,11 @@ router.post("/upload", uploadDocument.array("documents", 100), (req, res) => {
     const documentType = req.body.documentType || "general";
 
     // Use HTTPS base URL in production, otherwise use request protocol and host
-    const baseUrl =
-      process.env.NODE_ENV === "production"
-        ? "https://api.carnomia.com"
-        : `${req.protocol}://${req.get("host")}`;
+    // const baseUrl =
+    //   process.env.NODE_ENV === "production"
+    //     ? "https://api.carnomia.com"
+    //     : `${req.protocol}://${req.get("host")}`;
+        const baseUrl = "https://api.carnomia.com";
 
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({
