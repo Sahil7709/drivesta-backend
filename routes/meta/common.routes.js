@@ -87,18 +87,57 @@ const router = express.Router();
 //   }
 // });
 
+// router.post("/upload", uploadDocument.array("documents", 100), (req, res) => {
+//   try {
+//     const documentType = req.body.documentType || "general";
+
+//     // Detect HTTPS in production
+//     const baseUrl =
+//       process.env.NODE_ENV === "production"
+//         ? "https://api.carnomia.com"
+//         // : `${req.protocol}://${req.get("host")}`;
+//         : `${req.protocol}://${req.get("host")}`;
+
+//         console.log("ENV", process.env.NODE_ENV);
+
+//     if (!req.files || req.files.length === 0) {
+//       return res.status(400).json({
+//         status: "error",
+//         message: "No files uploaded",
+//       });
+//     }
+
+//     const uploadedFiles = req.files.map((file) => {
+//       const fileUrl = `${baseUrl}/uploads/${file.filename}`;
+//       return {
+//         fileName: file.originalname,
+//         fileUrl,
+//         documentType,
+//       };
+//     });
+
+//     res.json({
+//       status: "success",
+//       message: "Documents uploaded successfully",
+//       files: uploadedFiles,
+//     });
+//   } catch (err) {
+//     console.error("Upload error:", err);
+//     res.status(500).json({
+//       status: "error",
+//       message: "Document upload failed",
+//     });
+//   }
+// });
 router.post("/upload", uploadDocument.array("documents", 100), (req, res) => {
   try {
     const documentType = req.body.documentType || "general";
 
-    // Detect HTTPS in production
+    // Use HTTPS base URL in production, otherwise use request protocol and host
     const baseUrl =
       process.env.NODE_ENV === "production"
         ? "https://api.carnomia.com"
-        // : `${req.protocol}://${req.get("host")}`;
         : `${req.protocol}://${req.get("host")}`;
-
-        console.log("ENV", process.env.NODE_ENV);
 
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({
@@ -108,7 +147,9 @@ router.post("/upload", uploadDocument.array("documents", 100), (req, res) => {
     }
 
     const uploadedFiles = req.files.map((file) => {
+      // Construct file URL with proper base URL
       const fileUrl = `${baseUrl}/uploads/${file.filename}`;
+
       return {
         fileName: file.originalname,
         fileUrl,
