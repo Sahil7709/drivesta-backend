@@ -134,11 +134,10 @@ router.post("/upload", uploadDocument.array("documents", 100), (req, res) => {
     const documentType = req.body.documentType || "general";
 
     // Use HTTPS base URL in production, otherwise use request protocol and host
-    // const baseUrl =
-    //   process.env.NODE_ENV === "production"
-    //     ? "https://api.carnomia.com"
-    //     : `${req.protocol}://${req.get("host")}`;
-        const baseUrl = "https://api.carnomia.com";
+    const baseUrl =
+      process.env.NODE_ENV === "production"
+        ? "https://api.carnomia.com"
+        : `${req.protocol}://${req.get("host")}`;
 
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({
@@ -149,8 +148,12 @@ router.post("/upload", uploadDocument.array("documents", 100), (req, res) => {
 
     const uploadedFiles = req.files.map((file) => {
       // Construct file URL with proper base URL
-      const fileUrl = `${baseUrl}/uploads/${file.filename}`;
-
+      let fileUrl;  
+      if (documentType === "VEHICLE_IMAGES") {
+        fileUrl = `/uploads/2025/VEHICLE_IMAGES/${file.filename}`;
+      } else {
+        fileUrl = `/uploads/2025/general/${file.filename}`;
+      }
       return {
         fileName: file.originalname,
         fileUrl,

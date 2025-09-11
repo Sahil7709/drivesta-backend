@@ -200,11 +200,17 @@ app.use(
 );
 
 // CORS specifically for static uploads (needed for PDF/images)
+
+// Serve uploads with CORS and Cross-Origin-Resource-Policy header (for images)
 app.use(
   "/uploads",
+  (req, res, next) => {
+    res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
+    next();
+  },
   cors({
     origin: frontendOrigins,
-    credentials: true,
+    credentials: false, // usually not needed for images
   }),
   express.static(path.join(__dirname, "uploads"))
 );
