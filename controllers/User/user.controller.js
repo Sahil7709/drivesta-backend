@@ -115,47 +115,47 @@ export const registerUser = async (req, res) => {
   }
 };
 
-export const updateUser = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const updates = { ...req.body }; // all fields from request body
+// export const updateUser = async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     const updates = { ...req.body }; // all fields from request body
 
-    const user = await User.findById(id);
-    if (!user) {
-      return res.status(404).json({ success: false, error: "User not found" });
-    }
+//     const user = await User.findById(id);
+//     if (!user) {
+//       return res.status(404).json({ success: false, error: "User not found" });
+//     }
 
-    // Handle duplicate email
-    if (updates.email && updates.email !== user.email) {
-      const existingEmail = await User.findOne({ email: updates.email });
-      if (existingEmail) {
-        return res.status(400).json({ success: false, error: "Email already in use" });
-      }
-    }
+//     // Handle duplicate email
+//     if (updates.email && updates.email !== user.email) {
+//       const existingEmail = await User.findOne({ email: updates.email });
+//       if (existingEmail) {
+//         return res.status(400).json({ success: false, error: "Email already in use" });
+//       }
+//     }
 
-    // Hash password if provided
-    if (updates.password && updates.password.trim() !== "" && updates.role !== "customer") {
-      updates.password = await bcrypt.hash(updates.password, 10);
-    } else {
-      delete updates.password; // don't update if blank
-    }
+//     // Hash password if provided
+//     if (updates.password && updates.password.trim() !== "" && updates.role !== "customer") {
+//       updates.password = await bcrypt.hash(updates.password, 10);
+//     } else {
+//       delete updates.password; // don't update if blank
+//     }
 
-    // Merge updates into user document
-    Object.keys(updates).forEach(key => {
-      user[key] = updates[key]; // assign existing fields or add new fields dynamically
-    });
+//     // Merge updates into user document
+//     Object.keys(updates).forEach(key => {
+//       user[key] = updates[key]; // assign existing fields or add new fields dynamically
+//     });
 
-    await user.save();
-    res.status(200).json({
-      success: true,
-      message: `${user.role} updated successfully`,
-      user,
-    });
-  } catch (error) {
-    console.error("Update error:", error);
-    res.status(500).json({ success: false, error: "Server error", detail: error.message });
-  }
-};
+//     await user.save();
+//     res.status(200).json({
+//       success: true,
+//       message: `${user.role} updated successfully`,
+//       user,
+//     });
+//   } catch (error) {
+//     console.error("Update error:", error);
+//     res.status(500).json({ success: false, error: "Server error", detail: error.message });
+//   }
+// };
 
 // export const loginUser = async (req, res) => {
 //   const { name, email, password, mobile, otp } = req.body;
@@ -279,6 +279,63 @@ export const updateUser = async (req, res) => {
 //     });
 //   }
 // };
+
+export const updateUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updates = { ...req.body };
+
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ success: false, error: "User not found" });
+    }
+
+    // Handle duplicate email
+    if (updates.email && updates.email !== user.email) {
+      const existingEmail = await User.findOne({ email: updates.email });
+      if (existingEmail) {
+        return res
+          .status(400)
+          .json({ success: false, error: "Email already in use" });
+      }
+    }
+
+    // Hash password if provided
+    if (
+      updates.password &&
+      updates.password.trim() !== "" &&
+      updates.role !== "customer"
+    ) {
+      updates.password = await bcrypt.hash(updates.password, 10);
+    } else {
+      delete updates.password;
+    }
+
+    //Explicit handling for isAvailable toggle
+    if (typeof updates.isAvailable !== "undefined") {
+      user.isAvailable = updates.isAvailable;
+    }
+
+    // Merge other updates dynamically
+    Object.keys(updates).forEach((key) => {
+      if (key !== "password" && key !== "isAvailable") {
+        user[key] = updates[key];
+      }
+    });
+
+    await user.save();
+    res.status(200).json({
+      success: true,
+      message: `${user.role} updated successfully`,
+      user,
+    });
+  } catch (error) {
+    console.error("Update error:", error);
+    res
+      .status(500)
+      .json({ success: false, error: "Server error", detail: error.message });
+  }
+};
 
 export const loginUser = async (req, res) => {
   const { name, email, password, mobile } = req.body;

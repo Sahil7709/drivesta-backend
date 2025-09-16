@@ -40,6 +40,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       select: false,
     },
+    isAvailable: {
+      type: Boolean,
+      default: true,
+    },
     otp: {
       type: String,
       default: null,
