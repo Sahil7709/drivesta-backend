@@ -306,47 +306,9 @@ export const getAllPDIRequests = async (req, res) => {
   }
 };
 
-// export const getPDIRequestsByStatuses = async (req, res) => {
-//   try {
-//     const  statuses  = req.body; // Pass as array
-
-//     if (!Array.isArray(statuses) || statuses.length === 0) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Statuses array is required",
-//       });
-//     }
-
-//     let requests = [];
-//     if(req.user.role === 'customer') {
-//       // console.log("Customer ID:", req.user.id);
-//       requests = await PDIRequest.find({
-//         status: { $in: statuses},
-//         customerId: req.user.id
-//       });
-//     } else {
-//       requests = await PDIRequest.find({
-//         status: { $in: statuses }
-//       });
-//   }
-
-//     res.status(200).json({
-//       success: true,
-//       total: requests.length,
-//       data: requests,
-//     });
-//   } catch (error) {
-//     console.error("Get PDI Requests by Statuses Error:", error);
-//     res.status(500).json({
-//       success: false,
-//       message: "Server error while fetching PDI requests",
-//     });
-//   }
-// };
-
 export const getPDIRequestsByStatuses = async (req, res) => {
   try {
-    const statuses = req.body; // Pass as array
+    const  statuses  = req.body; // Pass as array
 
     if (!Array.isArray(statuses) || statuses.length === 0) {
       return res.status(400).json({
@@ -356,31 +318,17 @@ export const getPDIRequestsByStatuses = async (req, res) => {
     }
 
     let requests = [];
-    if (req.user.role === "customer") {
+    if(req.user.role === 'customer') {
+      // console.log("Customer ID:", req.user.id);
       requests = await PDIRequest.find({
-        status: { $in: statuses },
-        customerId: req.user.id,
-      }).lean();
+        status: { $in: statuses},
+        customerId: req.user.id
+      });
     } else {
       requests = await PDIRequest.find({
-        status: { $in: statuses },
-      }).lean();
-    }
-
-    // 🔹 Merge vehicle info for each request
-    requests = await Promise.all(
-      requests.map(async (reqItem) => {
-        const vehicleInfo = await VehicleModel.findOne({
-          brand: reqItem.brand,
-          model: reqItem.model,
-        }).lean();
-
-        return {
-          ...reqItem,
-          ...(vehicleInfo || {}), // merge if found
-        };
-      })
-    );
+        status: { $in: statuses }
+      });
+  }
 
     res.status(200).json({
       success: true,
@@ -395,6 +343,58 @@ export const getPDIRequestsByStatuses = async (req, res) => {
     });
   }
 };
+
+// export const getPDIRequestsByStatuses = async (req, res) => {
+//   try {
+//     const statuses = req.body; // Pass as array
+
+//     if (!Array.isArray(statuses) || statuses.length === 0) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Statuses array is required",
+//       });
+//     }
+
+//     let requests = [];
+//     if (req.user.role === "customer") {
+//       requests = await PDIRequest.find({
+//         status: { $in: statuses },
+//         customerId: req.user.id,
+//       }).lean();
+//     } else {
+//       requests = await PDIRequest.find({
+//         status: { $in: statuses },
+//       }).lean();
+//     }
+
+//     // 🔹 Merge vehicle info for each request
+//     requests = await Promise.all(
+//       requests.map(async (reqItem) => {
+//         const vehicleInfo = await VehicleModel.findOne({
+//           brand: reqItem.brand,
+//           model: reqItem.model,
+//         }).lean();
+
+//         return {
+//           ...reqItem,
+//           ...(vehicleInfo || {}), // merge if found
+//         };
+//       })
+//     );
+
+//     res.status(200).json({
+//       success: true,
+//       total: requests.length,
+//       data: requests,
+//     });
+//   } catch (error) {
+//     console.error("Get PDI Requests by Statuses Error:", error);
+//     res.status(500).json({
+//       success: false,
+//       message: "Server error while fetching PDI requests",
+//     });
+//   }
+// };
 
 export const getPDIRequestCountsByStatuses = async (req, res) => {
   try {
