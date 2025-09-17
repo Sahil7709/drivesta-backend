@@ -367,7 +367,7 @@ export const getPDIRequestsByStatuses = async (req, res) => {
       }).lean();
     }
 
-    // 🔹 Merge vehicle info for each request
+    // Merge with vehicle info under its own property
     requests = await Promise.all(
       requests.map(async (reqItem) => {
         const vehicleInfo = await VehicleModel.findOne({
@@ -377,7 +377,7 @@ export const getPDIRequestsByStatuses = async (req, res) => {
 
         return {
           ...reqItem,
-          ...(vehicleInfo || {}), // merge if found
+          vehicleInfo: vehicleInfo || {}, // ✅ avoid overwriting fields
         };
       })
     );

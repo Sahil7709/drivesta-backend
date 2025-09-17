@@ -190,12 +190,6 @@ const requestSchema = new mongoose.Schema(
   roof_issues: [String],
   roof_imageUrls: [String],
 
-  // 14. Front Windshield
-  front_windshield_repaint: { type: Boolean, default: false },
-  front_windshield_issues: [String],
-  front_windshield_imageUrls: [String],
-
-
   // 2) Glass Panels
   front_windshield_brand: String,
   front_windshield_manufacturingDate: String,
@@ -412,7 +406,7 @@ const requestSchema = new mongoose.Schema(
   tyre_front_left_variant: String,
   tyre_front_left_size: String,
   tyre_front_left_manufacturingDate: String,
-  tyre_front_left_treadDepth: Number,
+  tyre_front_left_threadDepth: Number,
   tyre_front_left_issues: [String],
   tyre_front_left_imageUrls: [String],
 
@@ -421,7 +415,7 @@ const requestSchema = new mongoose.Schema(
   tyre_rear_left_variant: String,
   tyre_rear_left_size: String,
   tyre_rear_left_manufacturingDate: String,
-  tyre_rear_left_treadDepth: Number,
+  tyre_rear_left_threadDepth: Number,
   tyre_rear_left_issues: [String],
   tyre_rear_left_imageUrls: [String],
 
@@ -430,7 +424,7 @@ const requestSchema = new mongoose.Schema(
   tyre_rear_right_variant: String,
   tyre_rear_right_size: String,
   tyre_rear_right_manufacturingDate: String,
-  tyre_rear_right_treadDepth: Number,
+  tyre_rear_right_threadDepth: Number,
   tyre_rear_right_issues: [String],
   tyre_rear_right_imageUrls: [String],
 
@@ -439,7 +433,7 @@ const requestSchema = new mongoose.Schema(
   tyre_front_right_variant: String,
   tyre_front_right_size: String,
   tyre_front_right_manufacturingDate: String,
-  tyre_front_right_treadDepth: Number,
+  tyre_front_right_threadDepth: Number,
   tyre_front_right_issues: [String],
   tyre_front_right_imageUrls: [String],
 
@@ -449,7 +443,7 @@ const requestSchema = new mongoose.Schema(
   tyre_spare_variant: String,
   tyre_spare_size: String,
   tyre_spare_manufacturingDate: String,
-  tyre_spare_treadDepth: Number,
+  tyre_spare_threadDepth: Number,
   tyre_spare_issues: [String],
   tyre_spare_imageUrls: [String],
 
