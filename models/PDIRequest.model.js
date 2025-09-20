@@ -241,6 +241,8 @@ const requestSchema = new mongoose.Schema(
   sunroof_glass_manufacturingDate: String,
   sunroof_glass_issues: [String],
   sunroof_glass_imageUrls: [String],
+  sunroof_glass_toggle:{ type: Boolean, default: false },
+
 
   // 3) Rubber Panels
   rubber_bonnet_issues: [String],

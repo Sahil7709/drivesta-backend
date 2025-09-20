@@ -4,31 +4,64 @@ import fs from "fs";
 import moment from "moment";
 import MetaData from "../../models/MetaData.js";
 
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     const currentYear = moment().format("YYYY");
+//     const documentType = req.body.documentType || "general";
+
+//     const uploadPath = path.join(
+//       process.cwd(),
+//       "uploads",
+//       currentYear,
+//       documentType
+//     );
+
+//     fs.mkdirSync(uploadPath, { recursive: true });
+
+//     cb(null, uploadPath);
+//   },
+//   filename: function (req, file, cb) {
+//     const uniqueName = Date.now() + "-" + file.originalname;
+//     cb(null, uniqueName);
+//   },
+// });
+
+// export const uploadDocument = multer({ storage });
+
+// Create or update dropdown folder data
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     const currentYear = moment().format("YYYY");
     const documentType = req.body.documentType || "general";
 
-    const uploadPath = path.join(
-      process.cwd(),
-      "uploads",
-      currentYear,
-      documentType
-    );
-
+    const uploadPath = path.join(process.cwd(), "uploads", currentYear, documentType);
     fs.mkdirSync(uploadPath, { recursive: true });
 
     cb(null, uploadPath);
   },
   filename: function (req, file, cb) {
-    const uniqueName = Date.now() + "-" + file.originalname;
+    const uniqueName = Date.now() + "-" + file.originalname.replace(/\s+/g, "_");
     cb(null, uniqueName);
   },
 });
 
-export const uploadDocument = multer({ storage });
+// ✅ Filter: allow any image type
+const fileFilter = (req, file, cb) => {
+  // accept only if mimetype starts with "image/"
+  if (file.mimetype.startsWith("image/")) {
+    cb(null, true);
+  } else {
+    cb(new Error("Only image files are allowed"), false);
+  }
+};
 
-// Create or update dropdown folder data
+export const uploadDocument = multer({
+  storage,
+  fileFilter,
+  limits: { fileSize: 10 * 1024 * 1024 }, // ✅ allow up to 10 MB
+});
+
 export const upsertMetaData = async (req, res) => {
   const { value, type, folderName } = req.body;
 
