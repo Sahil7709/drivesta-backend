@@ -264,6 +264,8 @@ const requestSchema = new mongoose.Schema(
   rubber_rear_wiper_imageUrls: [String],
   rubber_sunroof_issues: [String],
   rubber_sunroof_imageUrls: [String],
+  rubber_sunroof_toggle:{ type: Boolean, default: false },
+
 
   // 4) Seats & Fabrics
   seat_driver_issues: [String],
