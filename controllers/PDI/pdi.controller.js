@@ -346,7 +346,7 @@ export const getAllPDIRequests = async (req, res) => {
 
 export const getPDIRequestsByEngineer = async (req, res) => {
   try {
-    const { engineerId } = req.params; // Coming from route like /pdi/engineer/:engineerId
+    const { engineerId } = req.params; // Route: /pdi/engineer/:engineerId
 
     if (!engineerId) {
       return res.status(400).json({
@@ -357,12 +357,27 @@ export const getPDIRequestsByEngineer = async (req, res) => {
 
     let requests = [];
 
-    // Check if role is 'engineer' and filter accordingly
+    // Apply .lean() if user role is engineer
     if (req.user.role === "engineer") {
       requests = await PDIRequest.find({ engineer_id: engineerId }).lean();
     } else {
-      requests = await PDIRequest.find({ engineer_id: engineerId });
+      requests = await PDIRequest.find({ engineer_id: engineerId }).lean(); // optional: keep lean for consistency
     }
+
+    // Merge with vehicle info under its own property
+    requests = await Promise.all(
+      requests.map(async (reqItem) => {
+        const vehicleInfo = await VehicleModel.findOne({
+          brand: reqItem.brand,
+          model: reqItem.model,
+        }).lean();
+
+        return {
+          ...reqItem,
+          vehicleInfo: vehicleInfo || {},
+        };
+      })
+    );
 
     res.status(200).json({
       success: true,
