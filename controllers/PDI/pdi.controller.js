@@ -279,32 +279,32 @@ export const getAllPDIRequests = async (req, res) => {
   }
 };
 
- export const getPDIRequestsByEngineer = async (req, res) => {
-  try {
-    const { engineerId } = req.params; // Coming from route like /pdi/engineer/:engineerId
+//  export const getPDIRequestsByEngineer = async (req, res) => {
+//   try {
+//     const { engineerId } = req.params; // Coming from route like /pdi/engineer/:engineerId
 
-    if (!engineerId) {
-      return res.status(400).json({
-        success: false,
-        message: "Engineer ID is required",
-      });
-    }
+//     if (!engineerId) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Engineer ID is required",
+//       });
+//     }
 
-    const requests = await PDIRequest.find({ engineer_id:engineerId });
+//     const requests = await PDIRequest.find({ engineer_id:engineerId });
 
-    res.status(200).json({
-      success: true,
-      total: requests.length,
-      data: requests,
-    });
-  } catch (error) {
-    console.error("Get PDI Requests by Engineer Error:", error);
-    res.status(500).json({
-      success: false,
-      message: "Server error while fetching PDI requests",
-    });
-  }
-};
+//     res.status(200).json({
+//       success: true,
+//       total: requests.length,
+//       data: requests,
+//     });
+//   } catch (error) {
+//     console.error("Get PDI Requests by Engineer Error:", error);
+//     res.status(500).json({
+//       success: false,
+//       message: "Server error while fetching PDI requests",
+//     });
+//   }
+// };
 
 // export const getPDIRequestsByStatuses = async (req, res) => {
 //   try {
@@ -343,6 +343,40 @@ export const getAllPDIRequests = async (req, res) => {
 //     });
 //   }
 // };
+
+export const getPDIRequestsByEngineer = async (req, res) => {
+  try {
+    const { engineerId } = req.params; // Coming from route like /pdi/engineer/:engineerId
+
+    if (!engineerId) {
+      return res.status(400).json({
+        success: false,
+        message: "Engineer ID is required",
+      });
+    }
+
+    let requests = [];
+
+    // Check if role is 'engineer' and filter accordingly
+    if (req.user.role === "engineer") {
+      requests = await PDIRequest.find({ engineer_id: engineerId }).lean();
+    } else {
+      requests = await PDIRequest.find({ engineer_id: engineerId });
+    }
+
+    res.status(200).json({
+      success: true,
+      total: requests.length,
+      data: requests,
+    });
+  } catch (error) {
+    console.error("Get PDI Requests by Engineer Error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error while fetching PDI requests",
+    });
+  }
+};
 
 export const getPDIRequestsByStatuses = async (req, res) => {
   try {
