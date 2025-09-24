@@ -142,7 +142,7 @@ export const createPDIRequest = async (req, res) => {
       notes,
       bookingId,
       paymentStatus: "UNPAID",
-      paymentMode: "N/A",
+      paymentMode: "NA",
       amount: 2500,
     });
 
@@ -211,7 +211,7 @@ export const deleteInspectionById = async (req, res) => {
 export const updatePaymentStatus = async (req, res) => {
   try {
     const { id } = req.params; // PDI Request ID
-    const { paymentStatus, status } = req.body; // Accept both fields
+    const { paymentStatus, paymentMode, paymentDate, status } = req.body; // Accept both fields
 
     if (!paymentStatus || !status) {
       return res.status(400).json({ message: "Both paymentStatus and status are required" });
@@ -219,7 +219,7 @@ export const updatePaymentStatus = async (req, res) => {
 
     const updatedRequest = await PDIRequest.findByIdAndUpdate(
       id,
-      { paymentStatus, status }, // Update both fields
+      { paymentStatus, paymentMode, paymentDate, status }, // Update all fields
       { new: true }
     );
 
