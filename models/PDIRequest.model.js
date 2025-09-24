@@ -453,7 +453,10 @@ const requestSchema = new mongoose.Schema(
 
   amount: Number,
   // 15) Other Observations
-  other_observations: String,
+  other_observations: { type: String, default: "" },
+  overall_score: { type: Number, default: 0 },
+  overall_label: { type: String, default: "" },
+
 },
   { timestamps: true }
 );
