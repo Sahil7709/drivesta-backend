@@ -44,7 +44,6 @@ router.delete(
   deleteInspectionById
 );
 router.put("/request/assign", assignEngineer);
-router.get("/PDIRequestwithvehicledata", getSelectedPDIWithVehicleData);
 
 export default router;
 
