@@ -74,6 +74,7 @@ const requestSchema = new mongoose.Schema(
   odo_imageUrl: String,
   keys: String,
   keys_imageUrl: String,
+  manufacturingDate: String,
   dealer_pdi: { type: Boolean, default: false },
 
   front_left_imageUrl: String,

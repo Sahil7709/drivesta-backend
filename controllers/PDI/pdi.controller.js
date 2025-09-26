@@ -4,85 +4,6 @@ import User from "../../models/User.model.js";
 import Vehicle from "../../models/Vehicle.model.js";
 import VehicleModel from "../../models/Vehicle.model.js";
 
-// export const createPDIRequest = async (req, res) => {
-//   try {
-//     let {
-//       brand,
-//       model,
-//       variant,
-//       dealerName,
-//       address,
-//       carStatus,
-//       date,
-//       notes,
-//       customerName,
-//       customerMobile
-//     } = req.body;
-
-//     if(req.user.role === 'customer') {
-//       customerName = req.user.name;
-//       customerMobile = req.user.mobile;
-//     } else {
-//       customerName = req.body.customerName || req.user.name;
-//       customerMobile = req.body.customerMobile || req.user.mobile;
-//     }
-
-//     console.log("Body received:", req.body);
-
-//     const user = await User.findById(req.user.id);
-
-//     console.log("user from id ", user);
-//     if (!user) return res.status(404).json({ error: "Customer not found" });
-
-//     const vehicle = await Vehicle.findOne({ brand, model, variant });
-//     if (!vehicle) {
-//       return res
-//         .status(404)
-//         .json({ message: "Vehicle not found for this customer" });
-//     }
-
-//     // Generate booking ID
-//     const bookingId = await getCityPrefix();
-
-//     const newRequest = new PDIRequest({
-//       customerId: req.user.id,
-//       customerName: customerName,
-//       customerMobile: customerMobile,
-
-//       brand,
-//       model,
-//       variant,
-
-//       imageUrl: vehicle.imageUrl,
-//       transmissionType: vehicle.transmissionType,
-//       fuelType: vehicle.fuelType,
-
-//       dealerName,
-//       address,
-//       carStatus,
-//       status: "NEW",
-//       date,
-//       notes,
-//       bookingId,
-//       paymentStatus: "UNPAID",
-//       paymentMode: "N/A",
-//       amount: 2500
-//     });
-//     await newRequest.save();
-
-//     res.status(201).json({
-//       message: "PDI Request created successfully",
-//       request: newRequest,
-//       vehicleImage: vehicle.imageUrl,
-//     });
-//   } catch (error) {
-//     console.error("Create request error:", error.message, error.stack);
-//     res
-//       .status(500)
-//       .json({ message: "Something went wrong", error: error.message });
-//   }
-// };
-
 export const createPDIRequest = async (req, res) => {
   try {
     const {
@@ -143,6 +64,7 @@ export const createPDIRequest = async (req, res) => {
       bookingId,
       paymentStatus: "UNPAID",
       paymentMode: "NA",
+      paymentDate,
       amount: 2500,
     });
 
@@ -167,8 +89,6 @@ export const updateInspectionById = async (req, res) => {
 
     // Destructure fields from body (imageUrls will come as strings or arrays directly)
     const updateData = req.body;
-
-    console.log("data",updateData);
     
     
     const updatedInspection = await PDIRequest.findByIdAndUpdate(
@@ -241,11 +161,16 @@ export const getPDIRequestById = async (req, res) => {
   try {
     const { id } = req.params;
 
+    
+    
+
     if (!id) {
       return res.status(400).json({ message: "Request ID is required" });
     }
 
     const request = await PDIRequest.findById(id);
+
+    console.log("ID from params in backend :", request);
 
     if (!request) {
       return res.status(404).json({ message: "PDI Request not found" });
@@ -264,6 +189,9 @@ export const getPDIRequestById = async (req, res) => {
 export const getAllPDIRequests = async (req, res) => {
   try {
     const requests = await PDIRequest.find();
+
+    
+    
 
     res.status(200).json({
       success: true,
@@ -370,6 +298,7 @@ export const getPDIRequestsByEngineer = async (req, res) => {
         const vehicleInfo = await VehicleModel.findOne({
           brand: reqItem.brand,
           model: reqItem.model,
+          variant: reqItem.variant,
         }).lean();
 
         return {
@@ -422,6 +351,7 @@ export const getPDIRequestsByStatuses = async (req, res) => {
         const vehicleInfo = await VehicleModel.findOne({
           brand: reqItem.brand,
           model: reqItem.model,
+          variant: reqItem.variant,
         }).lean();
 
         return {
@@ -491,8 +421,7 @@ export const getRecentRequestByCustomer = async (req, res) => {
       .sort({ createdAt: -1 }) // sort by createdAt descending
       .lean(); // optional, returns plain JS object
 
-      const vehicleInfo = await VehicleModel.findOne({brand: recentRequest.brand, model: recentRequest.model }).lean();
-      recentRequest = {
+      const vehicleInfo = await VehicleModel.findOne({brand: recentRequest.brand, model: recentRequest.model, variant: recentRequest.variant}).lean();      recentRequest = {
         ...recentRequest,
         ...vehicleInfo
       }
@@ -560,7 +489,6 @@ export const assignEngineer = async (req, res) => {
     res.status(500).json({ message: "Server Error" });
   }
 };
-
 
 export const getSelectedPDIWithVehicleData = async (req, res) => {
   try {
