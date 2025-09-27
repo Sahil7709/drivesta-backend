@@ -11,7 +11,6 @@ import {
   getRecentRequestByCustomer,
   updatePaymentStatus,
   getPDIRequestById,
-  getSelectedPDIWithVehicleData,
 } from "../../controllers/PDI/pdi.controller.js";
 import authMiddlewares from "../../middleware/authMiddleware.js";
 import { uploadDocument } from './../../controllers/meta/commonController.js';
