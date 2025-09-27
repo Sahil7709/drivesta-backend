@@ -11,7 +11,6 @@ import pdiRoutes from "./routes/pdi/pdi.routes.js";
 import commonRoutes from "./routes/meta/common.routes.js";
 import metaRoutes from "./routes/meta/meta.routes.js";
 import lookupRoutes from "./routes/meta/lookup.routes.js";
-import pdfRoutes from "./routes/pdf/pdf.routes.js";
 // import bcrypt from "bcryptjs";
 
 // --------- ESM dirname setup --------- //
@@ -77,8 +76,6 @@ app.use("/api/pdi", pdiRoutes);
 app.use("/api/common", commonRoutes);
 app.use("/api/meta", metaRoutes);
 app.use("/api/lookups", lookupRoutes);
-app.use("/api/pdf", pdfRoutes);
-
 // ---------------- Health Check ---------------- //
 app.get("/", (req, res) => {
   res.send("✅ API is running...");
