@@ -64,7 +64,6 @@ export const createPDIRequest = async (req, res) => {
       bookingId,
       paymentStatus: "UNPAID",
       paymentMode: "NA",
-      paymentDate,
       amount: 2500,
     });
 
