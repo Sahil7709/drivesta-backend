@@ -4,18 +4,38 @@ import fs from "fs";
 import moment from "moment";
 import MetaData from "../../models/MetaData.js";
 
-// Base directory for uploads (can also be set from .env)
-const BASE_UPLOAD_DIR = process.env.UPLOADS_DIR || "/var/www/uploads";
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     const currentYear = moment().format("YYYY");
+//     const documentType = req.body.documentType || "general";
 
-// Multer storage config
+//     const uploadPath = path.join(
+//       process.cwd(),
+//       "uploads",
+//       currentYear,
+//       documentType
+//     );
+
+//     fs.mkdirSync(uploadPath, { recursive: true });
+
+//     cb(null, uploadPath);
+//   },
+//   filename: function (req, file, cb) {
+//     const uniqueName = Date.now() + "-" + file.originalname;
+//     cb(null, uniqueName);
+//   },
+// });
+
+// export const uploadDocument = multer({ storage });
+
+// Create or update dropdown folder data
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     const currentYear = moment().format("YYYY");
     const documentType = req.body.documentType || "general";
 
-    // Example: /var/www/uploads/2025/VEHICLE_IMAGES
-    const uploadPath = path.join(BASE_UPLOAD_DIR, currentYear, documentType);
-
+    const uploadPath = path.join(process.cwd(), "uploads", currentYear, documentType);
     fs.mkdirSync(uploadPath, { recursive: true });
 
     cb(null, uploadPath);
@@ -26,8 +46,9 @@ const storage = multer.diskStorage({
   },
 });
 
-// ✅ Filter: allow only images
+// ✅ Filter: allow any image type
 const fileFilter = (req, file, cb) => {
+  // accept only if mimetype starts with "image/"
   if (file.mimetype.startsWith("image/")) {
     cb(null, true);
   } else {
@@ -38,11 +59,8 @@ const fileFilter = (req, file, cb) => {
 export const uploadDocument = multer({
   storage,
   fileFilter,
-  limits: { fileSize: 10 * 1024 * 1024 }, // 10 MB
+  limits: { fileSize: 10 * 1024 * 1024 }, // ✅ allow up to 10 MB
 });
-
-
-// ---------------- MetaData Controllers ---------------- //
 
 export const upsertMetaData = async (req, res) => {
   const { value, type, folderName } = req.body;
@@ -53,7 +71,7 @@ export const upsertMetaData = async (req, res) => {
       .json({ message: "value, type, and folderName are required" });
   }
 
-  const label = value.charAt(0).toUpperCase() + value.slice(1);
+  const label = value.charAt(0).toUpperCase() + value.slice(1); // Capitalize
 
   try {
     let meta = await MetaData.findOne({ type });
@@ -88,6 +106,7 @@ export const upsertMetaData = async (req, res) => {
   }
 };
 
+// Get all dropdowns by type
 export const getMetaDataByType = async (req, res) => {
   const { type } = req.params;
 
@@ -103,6 +122,7 @@ export const getMetaDataByType = async (req, res) => {
   }
 };
 
+// update dropdwon data
 export const updateMetaData = async (req, res) => {
   const { type, folderName, oldValue, newValue } = req.body;
 
@@ -126,6 +146,7 @@ export const updateMetaData = async (req, res) => {
   }
 };
 
+// delete dropdowun field
 export const deleteMetaData = async (req, res) => {
   const { type, folderName, value } = req.body;
 
