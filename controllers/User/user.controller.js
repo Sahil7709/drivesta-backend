@@ -401,8 +401,6 @@ export const loginUser = async (req, res) => {
         return res.status(404).json({ message: "User not registered" });
       }
 
-      console.log("Logged In User: ", user);
-
       if (!user.password) {
         return res
           .status(400)

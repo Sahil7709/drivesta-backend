@@ -401,10 +401,6 @@ const requestSchema = new mongoose.Schema(
   // 13) Diagnostics
   diagnostic_codes: [String],
 
-  paymentStatus:  String,
-  paymentMode: String,
-  paymentDate: String,
-
   // 14) Tyres
   tyre_front_left_brand: String,
   tyre_front_left_subBrand: String,
@@ -452,11 +448,16 @@ const requestSchema = new mongoose.Schema(
   tyre_spare_issues: [String],
   tyre_spare_imageUrls: [String],
 
-  amount: Number,
   // 15) Other Observations
   other_observations: { type: String, default: "" },
   overall_score: { type: Number, default: 0 },
   score_label: { type: String, default: "" },
+
+  //Payment
+  paymentStatus: String,
+  paymentMode: String,
+  amount: Number,
+  paymentDate: { type: Date },
 
 },
   { timestamps: true }

@@ -127,18 +127,65 @@ export const deleteInspectionById = async (req, res) => {
   }
 };
 
+// export const updatePaymentStatus = async (req, res) => {
+//   try {
+//     const { id } = req.params; // PDI Request ID
+//     const { paymentStatus, paymentMode, status } = req.body; // Accept both fields
+
+//     if (!paymentStatus || !status) {
+//       return res.status(400).json({ message: "Both paymentStatus and status are required" });
+//     }
+
+//     const updatedRequest = await PDIRequest.findByIdAndUpdate(
+//       id,
+//       { paymentStatus, paymentMode, status }, // Update all fields
+//       { new: true }
+//     );
+
+//     if (!updatedRequest) {
+//       return res.status(404).json({ message: "PDI Request not found" });
+//     }
+
+//     return res.status(200).json({
+//       message: "Payment and request status updated successfully",
+//       data: updatedRequest,
+//     });
+//   } catch (error) {
+//     console.error("Error updating payment/request status:", error);
+//     return res.status(500).json({ message: "Server error" });
+//   }
+// };
 export const updatePaymentStatus = async (req, res) => {
   try {
     const { id } = req.params; // PDI Request ID
-    const { paymentStatus, paymentMode, status } = req.body; // Accept both fields
+    const { paymentStatus, paymentMode, status, amount } = req.body;
 
     if (!paymentStatus || !status) {
       return res.status(400).json({ message: "Both paymentStatus and status are required" });
     }
 
+    // Prepare update fields
+    const updateFields = {
+      paymentStatus,
+      paymentMode,
+      status,
+    };
+
+    // If amount is provided, update it
+    if (amount !== undefined && amount !== null) {
+      updateFields.amount = amount;
+    }
+
+    // If payment is marked as PAID, set paymentDate
+    if (paymentStatus.toUpperCase() === "PAID") {
+      updateFields.paymentDate = new Date();
+    } else {
+      updateFields.paymentDate = null; // reset if unpaid/pending
+    }
+
     const updatedRequest = await PDIRequest.findByIdAndUpdate(
       id,
-      { paymentStatus, paymentMode, status }, // Update all fields
+      { $set: updateFields },
       { new: true }
     );
 
@@ -159,9 +206,6 @@ export const updatePaymentStatus = async (req, res) => {
 export const getPDIRequestById = async (req, res) => {
   try {
     const { id } = req.params;
-
-    
-    
 
     if (!id) {
       return res.status(400).json({ message: "Request ID is required" });
@@ -188,10 +232,7 @@ export const getPDIRequestById = async (req, res) => {
 export const getAllPDIRequests = async (req, res) => {
   try {
     const requests = await PDIRequest.find();
-
     
-    
-
     res.status(200).json({
       success: true,
       total: requests.length,
