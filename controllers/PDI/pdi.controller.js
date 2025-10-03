@@ -155,32 +155,30 @@ export const deleteInspectionById = async (req, res) => {
 //     return res.status(500).json({ message: "Server error" });
 //   }
 // };
+
 export const updatePaymentStatus = async (req, res) => {
   try {
     const { id } = req.params; // PDI Request ID
-    const { paymentStatus, paymentMode, status, amount } = req.body;
+    const { paymentStatus, paymentMode, status, amount, paymentDate } = req.body;
 
     if (!paymentStatus || !status) {
       return res.status(400).json({ message: "Both paymentStatus and status are required" });
     }
 
-    // Prepare update fields
     const updateFields = {
       paymentStatus,
-      paymentMode,
+      paymentMode: paymentMode || "CASH",
       status,
     };
 
-    // If amount is provided, update it
     if (amount !== undefined && amount !== null) {
-      updateFields.amount = amount;
+      updateFields.amount = Number(amount);
     }
 
-    // If payment is marked as PAID, set paymentDate
     if (paymentStatus.toUpperCase() === "PAID") {
-      updateFields.paymentDate = new Date();
+      updateFields.paymentDate = paymentDate ? new Date(paymentDate) : new Date();
     } else {
-      updateFields.paymentDate = null; // reset if unpaid/pending
+      updateFields.paymentDate = null; 
     }
 
     const updatedRequest = await PDIRequest.findByIdAndUpdate(
