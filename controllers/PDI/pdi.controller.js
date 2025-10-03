@@ -169,6 +169,8 @@ export const updatePaymentStatus = async (req, res) => {
       paymentStatus,
       paymentMode: paymentMode || "CASH",
       status,
+      amount,
+      paymentDate: null
     };
 
     if (amount !== undefined && amount !== null) {
