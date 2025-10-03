@@ -161,7 +161,6 @@ export const updatePaymentStatus = async (req, res) => {
     const { id } = req.params; // PDI Request ID
     const { paymentStatus, paymentMode, status, amount, paymentDate } = req.body;
 
-    console.log("Received payload:", req.body);
     if (!paymentStatus || !status) {
       return res.status(400).json({ message: "Both paymentStatus and status are required" });
     }
@@ -176,13 +175,10 @@ export const updatePaymentStatus = async (req, res) => {
 
     if (amount !== undefined && amount !== null) {
       updateFields.amount = amount;
-      console.log("Amount set to:", updateFields.amount);
-
     }
 
     if (paymentStatus.toUpperCase() === "PAID") {
       updateFields.paymentDate = paymentDate ? new Date(paymentDate) : new Date();
-      console.log("Payment date set to:", updateFields.paymentDate);
     } else {
       updateFields.paymentDate = null; 
     }
@@ -196,8 +192,6 @@ export const updatePaymentStatus = async (req, res) => {
     if (!updatedRequest) {
       return res.status(404).json({ message: "PDI Request not found" });
     }
-
-    console.log("Updated PDI Request:", updatedRequest);
 
     return res.status(200).json({
       message: "Payment and request status updated successfully",
