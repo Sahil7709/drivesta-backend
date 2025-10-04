@@ -213,8 +213,6 @@ export const getPDIRequestById = async (req, res) => {
 
     const request = await PDIRequest.findById(id);
 
-    console.log("ID from params in backend :", request);
-
     if (!request) {
       return res.status(404).json({ message: "PDI Request not found" });
     }
