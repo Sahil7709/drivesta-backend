@@ -330,6 +330,7 @@ const requestSchema = new mongoose.Schema(
   plastic_irvm_imageUrls: [String],
 
   // 7) Flushes & Gaps
+
   // 1. Bonnet Right
   bonnet_right_rough_operation: { type: Boolean, default: false },
   bonnet_right_gap_observed: { type: Boolean, default: false },
@@ -337,7 +338,7 @@ const requestSchema = new mongoose.Schema(
   bonnet_right_gap_reading_top: Number,
   bonnet_right_gap_reading_down: Number,
 
-  // 2. Bonnet Left Door
+  // 2. Bonnet Left
   bonnet_left_rough_operation: { type: Boolean, default: false },
   bonnet_left_gap_observed: { type: Boolean, default: false },
 
@@ -358,12 +359,60 @@ const requestSchema = new mongoose.Schema(
   front_left_door_gap_reading_top: Number,
   front_left_door_gap_reading_down: Number,
 
-  // 5. Rear Right
+  // 5. Rear Right Door
   rear_right_door_rough_operation: { type: Boolean, default: false },
   rear_right_door_gap_observed: { type: Boolean, default: false },
 
   rear_right_door_gap_reading_top: Number,
   rear_right_door_gap_reading_down: Number,
+
+  //6 Rear Left Door
+  rear_left_door_rough_operation: { type: Boolean, default: false },
+  rear_left_door_gap_observed: { type: Boolean, default: false },
+
+  rear_left_door_gap_reading_top: Number,
+  rear_left_door_gap_reading_down: Number,
+  
+  //7 Boot Right
+  boot_right_rough_operation: { type: Boolean, default: false },
+  boot_right_gap_observed: { type: Boolean, default: false },
+
+  boot_right_gap_reading_top: Number,
+  boot_right_gap_reading_down: Number,
+
+  //8 Boot Left
+  boot_left_rough_operation: { type: Boolean, default: false },
+  boot_left_gap_observed: { type: Boolean, default: false },
+
+  boot_left_gap_reading_top: Number,
+  boot_left_gap_reading_down: Number,
+  //9 Front Bumper Left
+  front_bumper_left_rough_operation: { type: Boolean, default: false },
+  front_bumper_left_gap_observed: { type: Boolean, default: false },
+
+  front_bumper_left_gap_reading_top: Number,
+  front_bumper_left_gap_reading_down: Number,
+
+  //10 Front Bumper Right
+  front_bumper_right_rough_operation: { type: Boolean, default: false },
+  front_bumper_right_gap_observed: { type: Boolean, default: false },
+
+  front_bumper_right_gap_reading_top: Number,
+  front_bumper_right_gap_reading_down: Number,
+
+  //11 Rear Bumper Left
+  rear_bumper_left_rough_operation: { type: Boolean, default: false },
+  rear_bumper_left_gap_observed: { type: Boolean, default: false },
+
+  rear_bumper_left_gap_reading_top: Number,
+  rear_bumper_left_gap_reading_down: Number,
+
+  //12 Rear Bumper Right
+  rear_bumper_right_rough_operation: { type: Boolean, default: false },
+  rear_bumper_right_gap_observed: { type: Boolean, default: false },
+
+  rear_bumper_right_gap_reading_top: Number,
+  rear_bumper_right_gap_reading_down: Number,
 
   // 8) Features & Functions
   feature_parking_sensors_front_available: { type: Boolean, default: true },      // Default true as available

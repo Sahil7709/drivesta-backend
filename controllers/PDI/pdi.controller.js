@@ -127,35 +127,6 @@ export const deleteInspectionById = async (req, res) => {
   }
 };
 
-// export const updatePaymentStatus = async (req, res) => {
-//   try {
-//     const { id } = req.params; // PDI Request ID
-//     const { paymentStatus, paymentMode, status } = req.body; // Accept both fields
-
-//     if (!paymentStatus || !status) {
-//       return res.status(400).json({ message: "Both paymentStatus and status are required" });
-//     }
-
-//     const updatedRequest = await PDIRequest.findByIdAndUpdate(
-//       id,
-//       { paymentStatus, paymentMode, status }, // Update all fields
-//       { new: true }
-//     );
-
-//     if (!updatedRequest) {
-//       return res.status(404).json({ message: "PDI Request not found" });
-//     }
-
-//     return res.status(200).json({
-//       message: "Payment and request status updated successfully",
-//       data: updatedRequest,
-//     });
-//   } catch (error) {
-//     console.error("Error updating payment/request status:", error);
-//     return res.status(500).json({ message: "Server error" });
-//   }
-// };
-
 export const updatePaymentStatus = async (req, res) => {
   try {
     const { id } = req.params; // PDI Request ID
@@ -244,71 +215,6 @@ export const getAllPDIRequests = async (req, res) => {
     });
   }
 };
-
-//  export const getPDIRequestsByEngineer = async (req, res) => {
-//   try {
-//     const { engineerId } = req.params; // Coming from route like /pdi/engineer/:engineerId
-
-//     if (!engineerId) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Engineer ID is required",
-//       });
-//     }
-
-//     const requests = await PDIRequest.find({ engineer_id:engineerId });
-
-//     res.status(200).json({
-//       success: true,
-//       total: requests.length,
-//       data: requests,
-//     });
-//   } catch (error) {
-//     console.error("Get PDI Requests by Engineer Error:", error);
-//     res.status(500).json({
-//       success: false,
-//       message: "Server error while fetching PDI requests",
-//     });
-//   }
-// };
-
-// export const getPDIRequestsByStatuses = async (req, res) => {
-//   try {
-//     const  statuses  = req.body; // Pass as array
-
-//     if (!Array.isArray(statuses) || statuses.length === 0) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Statuses array is required",
-//       });
-//     }
-
-//     let requests = [];
-//     if(req.user.role === 'customer') {
-//       // console.log("Customer ID:", req.user.id);
-//       requests = await PDIRequest.find({
-//         status: { $in: statuses},
-//         customerId: req.user.id
-//       });
-//     } else {
-//       requests = await PDIRequest.find({
-//         status: { $in: statuses }
-//       });
-//   }
-
-//     res.status(200).json({
-//       success: true,
-//       total: requests.length,
-//       data: requests,
-//     });
-//   } catch (error) {
-//     console.error("Get PDI Requests by Statuses Error:", error);
-//     res.status(500).json({
-//       success: false,
-//       message: "Server error while fetching PDI requests",
-//     });
-//   }
-// };
 
 export const getPDIRequestsByEngineer = async (req, res) => {
   try {
