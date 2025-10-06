@@ -86,6 +86,8 @@ export const updateInspectionById = async (req, res) => {
   try {
     const { id } = req.params;
 
+      console.log("Request body received for update:", req.body);
+
     // Destructure fields from body (imageUrls will come as strings or arrays directly)
     const updateData = req.body;
     
@@ -99,6 +101,7 @@ export const updateInspectionById = async (req, res) => {
     if (!updatedInspection) {
       return res.status(404).json({ message: "Inspection not found" });
     }
+      console.log("Inspection updated successfully:", updatedInspection);
 
     res.json({
       message: "Inspection updated successfully",

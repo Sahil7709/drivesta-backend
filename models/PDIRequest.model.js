@@ -366,48 +366,48 @@ const requestSchema = new mongoose.Schema(
   rear_right_door_gap_reading_top: Number,
   rear_right_door_gap_reading_down: Number,
 
-  //6 Rear Left Door
+  // 6 Rear Left Door
   rear_left_door_rough_operation: { type: Boolean, default: false },
   rear_left_door_gap_observed: { type: Boolean, default: false },
 
   rear_left_door_gap_reading_top: Number,
   rear_left_door_gap_reading_down: Number,
   
-  //7 Boot Right
+  // 7 Boot Right
   boot_right_rough_operation: { type: Boolean, default: false },
   boot_right_gap_observed: { type: Boolean, default: false },
 
   boot_right_gap_reading_top: Number,
   boot_right_gap_reading_down: Number,
 
-  //8 Boot Left
+  // 8 Boot Left
   boot_left_rough_operation: { type: Boolean, default: false },
   boot_left_gap_observed: { type: Boolean, default: false },
 
   boot_left_gap_reading_top: Number,
   boot_left_gap_reading_down: Number,
-  //9 Front Bumper Left
+  // 9 Front Bumper Left
   front_bumper_left_rough_operation: { type: Boolean, default: false },
   front_bumper_left_gap_observed: { type: Boolean, default: false },
 
   front_bumper_left_gap_reading_top: Number,
   front_bumper_left_gap_reading_down: Number,
 
-  //10 Front Bumper Right
+  // 10 Front Bumper Right
   front_bumper_right_rough_operation: { type: Boolean, default: false },
   front_bumper_right_gap_observed: { type: Boolean, default: false },
 
   front_bumper_right_gap_reading_top: Number,
   front_bumper_right_gap_reading_down: Number,
 
-  //11 Rear Bumper Left
+  // 11 Rear Bumper Left
   rear_bumper_left_rough_operation: { type: Boolean, default: false },
   rear_bumper_left_gap_observed: { type: Boolean, default: false },
 
   rear_bumper_left_gap_reading_top: Number,
   rear_bumper_left_gap_reading_down: Number,
 
-  //12 Rear Bumper Right
+  // 12 Rear Bumper Right
   rear_bumper_right_rough_operation: { type: Boolean, default: false },
   rear_bumper_right_gap_observed: { type: Boolean, default: false },
 
